@@ -1,0 +1,35 @@
+{
+  "student": [
+    {
+      "id": "1",
+      "name": "someone",
+      "age": 16,
+      "phone": "+998901234567",
+      "group": "Bootcamp React N11",
+      "teacher": "Kimdur",
+      "address": "Sergeli"
+    }
+  ],
+  "teacher": [
+    {
+      "id": "9711",
+      "course": "Standart Design",
+      "name": "James Muller"
+    }
+  ],
+  "group": [
+    {
+      "id": "123",
+      "name": "Stadart n11",
+      "course": "3D Design"
+    }
+  ],
+  "course": [
+    {
+      "id": "12",
+      "name": "Standart Design",
+      "duration": "8-oy",
+      "price": "100$"
+    }
+  ]
+}
