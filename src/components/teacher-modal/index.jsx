@@ -6,7 +6,15 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { teacherValidatioinScheme } from "@utils/validations";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import axios from "axios";
 
 const style = {
@@ -21,24 +29,29 @@ const style = {
   p: 4,
 };
 
-export default function TransitionsModal({ open, handleClose, course, setOpen, data, setData }) {
+export default function TransitionsModal({
+  open,
+  handleClose,
+  course,
+  setOpen,
+  data,
+  setData,
+}) {
+  const initialValue = {
+    course: "",
+    name: "",
+  };
 
-      const [form, setForm] = useState({})
-      const handleChange = (event) => {
-          const {name, value} = event.target
-          setForm({...form, [name]: value})
-      };
+  const handleSubmit = async (value) => {
+    try {
+      const res = await axios.post("http://localhost:3000/teacher", value);
+      setData([...data, res.data]);
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      const handleSubmit = async () => {
-       try {
-        const res = await axios.post("http://localhost:3000/teacher", form)
-        setData([...data, res.data])
-        setOpen(false)
-       } catch (error) {
-          console.log(error);
-       }
-      }
-      
   return (
     <div>
       <Modal
@@ -56,38 +69,73 @@ export default function TransitionsModal({ open, handleClose, course, setOpen, d
       >
         <Fade in={open}>
           <Box sx={style}>
-            <FormControl fullWidth className="d-flex gap-3">
-              <InputLabel id="demo-simple-select-label">Course</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                name="course"
-                label="Course"
-                // value={form.course}
-                onChange={handleChange}
-              >
-                {
-                 
-                  course.map((val, ind) => (
-                    <MenuItem value={val.name} key={ind}>{val.name}</MenuItem>
-                  ))
+            <Formik
+              initialValues={initialValue}
+              onSubmit={handleSubmit}
+              validationSchema={teacherValidatioinScheme}
+            >
+              
 
-                }
-              </Select>
+              {({handleChange, values}) => (
+                <Form>
+                <FormControl fullWidth className="d-flex gap-3">
+                  <InputLabel id="demo-simple-select-label">Course</InputLabel>
+                
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      name="course"
+                      label="Course"
+                      value={values.course}
+                      onChange={handleChange}
+                    >
+                      {course.map((val, ind) => (
+                        <MenuItem value={val.name} key={ind}>
+                          {val.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <ErrorMessage name="course" component="div" className="text-danger" />
 
-              <TextField 
-                fullWidth 
-                label="Teacher name" 
-                name="name"
-                // value={form.name}
-                onChange={handleChange}
-              />
-              <Button 
-              // type="submit" 
-              variant="contained" 
-              color="primary" 
-              onClick={handleSubmit}>Save</Button>
-            </FormControl>
+                  <Field
+                      as={TextField}
+                      fullWidth
+                      label="Teacher name"
+                      name="name"
+                      value={values.name}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage name="name" component="div" className="text-danger" />
+
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      style={{ marginTop: "12px" }}
+                    >
+                      Save
+                    </Button>
+                  
+
+                  {/* <TextField
+                    fullWidth
+                    label="Teacher name"
+                    name="name"
+                    // value={form.name}
+                    // onChange={handleChange}
+                  />
+                  <Button
+                    // type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                  >
+                    Save
+                  </Button> */}
+                </FormControl>
+              </Form>
+              )}
+            </Formik>
           </Box>
         </Fade>
       </Modal>

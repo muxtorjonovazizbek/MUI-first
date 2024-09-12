@@ -18,6 +18,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { NavLink, Outlet } from 'react-router-dom';
 import {admin} from "../../router/routes"
+import { blue } from '@mui/material/colors';
+import { useLocation } from 'react-router-dom';
+
 
 const drawerWidth = 240;
 
@@ -41,20 +44,28 @@ function ResponsiveDrawer(props) {
     }
   };
 
+  const {pathname} = useLocation()
+
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
-        {admin?.map((item, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
-                <NavLink style={{textDecoration: "none", color: "#757575"}} to={item.path}>{item.content}</NavLink>
-            </ListItemButton>
-          </ListItem>
+          {admin?.map((item, index) => (
+            <NavLink 
+              style={{textDecoration: "none", color: "#757575", display: "block"}} 
+              key={index} to={item.path}
+            className={item.path === pathname ? ' bg-primary text-white' : ""}  
+            >
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText  primary={item.content } />
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
         ))}
       </List>
       
