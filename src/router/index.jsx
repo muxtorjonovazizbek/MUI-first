@@ -6,7 +6,7 @@ import {
   } from "react-router-dom";
   
   import App from "../App";
-  import { Login, Owner, User, Teacher, Student, Home, Groups, Settings } from "../pages";
+  import { Login, Owner, User, Teacher, Student, Home, Groups, Settings, SignUp } from "../pages";
 
 
 const Index = () => {
@@ -14,6 +14,7 @@ const Index = () => {
         createRoutesFromElements(
           <Route path="/" element={<App />}>
             <Route index element={<Login />} />
+            <Route path="/sign-up" element={<SignUp />} />
 
             <Route path="owner" element={<Owner />} >
               <Route index element={<Teacher />} />

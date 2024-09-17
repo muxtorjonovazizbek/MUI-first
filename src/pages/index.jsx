@@ -6,6 +6,7 @@ import Student from "./student/index"
 import Home from "./home/index"
 import Groups from "./Groups/index"
 import Settings from "./Settings/index"
+import SignUp from "./sign-up"
 export {
     Login,
     Owner,
@@ -15,5 +16,6 @@ export {
     Home,
     Groups,
     Settings,
+    SignUp
     
 }

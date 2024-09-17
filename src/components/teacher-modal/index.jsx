@@ -46,6 +46,7 @@ export default function TransitionsModal({
     try {
       const res = await axios.post("http://localhost:3000/teacher", value);
       setData([...data, res.data]);
+      // window.location.reload()
       setOpen(false);
     } catch (error) {
       console.log(error);

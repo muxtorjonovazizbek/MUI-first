@@ -3,7 +3,7 @@ import { Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { signInValidationScheme } from "@utils/validations";
+import { signUpValidationScheme } from "@utils/validations";
 import Notification from "../../utils/notification";
 import axios from "axios";
 
@@ -18,7 +18,10 @@ const Index = () => {
   // };
   
   const initialValues = {
-    phone_number: "",
+    first_name:"",
+    last_name:"",
+    phone_number:"",
+    email:"",
     password: ""
   };
 
@@ -39,18 +42,18 @@ const Index = () => {
     // }
 
     try {
-      const res = await axios.post("https://texnoark.ilyosbekdev.uz/auth/sign-in", value)
+      const res = await axios.post("https://texnoark.ilyosbekdev.uz/auth/admin/sign-up", value)
       console.log(res);
+
       if (res.status === 201) {
-        Notification({ title: "Successfully signed in", type: "success" });
-          navigate("/owner")
+          navigate('/')
       }
-      
       
     } catch (error) {
       console.log(error);
       Notification({title: "Error has found", type: "error"})
     }
+    
   };
 
   return (
@@ -60,26 +63,74 @@ const Index = () => {
         <div className="col-md-6 offset-3">
           <div className="card">
             <div className="card-header">
-              <Typography variant="h3">Material UI Design</Typography>
+              <Typography variant="h3">Sign Up</Typography>
             </div>
             <div className="card-body">
              <Formik 
               initialValues={initialValues} 
-              onSubmit={handleSubmit}
-              validationSchema={signInValidationScheme}
+              onSubmit={handleSubmit} 
+              validationSchema={signUpValidationScheme}
              > 
-                <Form id="sign-in">
+                <Form id="sign-up">
                   <Field
-                    name="phone_number"
+                    name="first_name"
+                    as={TextField}
+                    type="text"
+                    fullWidth
+                    // margin="normal"
+                    variant="outlined"
+                    label="First name"
+                    helperText={
+                      <ErrorMessage
+                        name="first_name"
+                        component="p"
+                        className="fs-4 text-danger"
+                      />
+                    }
+                  />
+                  <Field
+                    name="last_name"
                     as={TextField}
                     type="text"
                     fullWidth
                     margin="normal"
                     variant="outlined"
+                    label="Last name"
+                    helperText={
+                      <ErrorMessage
+                        name="last_name"
+                        component="p"
+                        className="fs-4 text-danger"
+                      />
+                    }
+                  />
+                  <Field
+                    name="phone_number"
+                    as={TextField}
+                    type="text"
+                    fullWidth
+                    // margin="normal"
+                    variant="outlined"
                     label="Phone number"
                     helperText={
                       <ErrorMessage
                         name="phone_number"
+                        component="p"
+                        className="fs-4 text-danger"
+                      />
+                    }
+                  />
+                  <Field
+                    name="email"
+                    as={TextField}
+                    type="email"
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    label="Email"
+                    helperText={
+                      <ErrorMessage
+                        name="email"
                         component="p"
                         className="fs-4 text-danger"
                       />
@@ -109,7 +160,7 @@ const Index = () => {
                   type='submit' 
                   variant='contained' 
                   color="success" 
-                  form="sign-in"
+                  form="sign-up"
                   style={{marginTop: '12px'}} 
                   className='d-flex flex-column align-items-start'
               >
