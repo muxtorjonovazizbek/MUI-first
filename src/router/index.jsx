@@ -10,7 +10,7 @@ import {
 
 
 const Index = () => {
-    const router = createBrowserRouter(
+    const router = createBrowserRouter( 
         createRoutesFromElements(
           <Route path="/" element={<App />}>
             <Route index element={<Login />} />

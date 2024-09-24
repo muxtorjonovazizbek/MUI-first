@@ -11,7 +11,7 @@ const admin = [
         icon: <Person4Icon/>
     },
     {
-        content: "Student",
+        content: "Category",
         path: "/owner/student",
         icon: <PersonIcon/>
     }

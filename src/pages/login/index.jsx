@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { signInValidationScheme } from "@utils/validations";
 import Notification from "../../utils/notification";
+import { auth } from "@service";
 import axios from "axios";
 
 
@@ -39,17 +40,21 @@ const Index = () => {
     // }
 
     try {
-      const res = await axios.post("https://texnoark.ilyosbekdev.uz/auth/sign-in", value)
-      console.log(res);
-      if (res.status === 201) {
-        Notification({ title: "Successfully signed in", type: "success" });
-          navigate("/owner")
-      }
+      const res = await auth.sign_in(value)
+      // console.log(res);
+      let access_token = res.data.data.tokens.access_token
+      localStorage.setItem("access_token", access_token)
+      console.log(access_token);
+      navigate("/owner")
+      
+      // if (access_token.status === 200) {
+      //   Notification({ title: "Successfully signed in", type: "success" });
+      // }
       
       
     } catch (error) {
       console.log(error);
-      Notification({title: "Error has found", type: "error"})
+      Notification({title: "Password or Phone number is wrong!", type: "error"})
     }
   };
 
@@ -81,7 +86,7 @@ const Index = () => {
                       <ErrorMessage
                         name="phone_number"
                         component="p"
-                        className="fs-4 text-danger"
+                        className="fs-4, text-danger"
                       />
                     }
                   />
