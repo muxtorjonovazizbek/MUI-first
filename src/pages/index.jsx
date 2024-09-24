@@ -7,6 +7,9 @@ import Home from "./home/index"
 import Groups from "./Groups/index"
 import Settings from "./Settings/index"
 import SignUp from "./sign-up"
+import Brand from "./brand"
+import BrandCategory from "./brand-category"
+import Ads from "./ads"
 export {
     Login,
     Owner,
@@ -16,6 +19,9 @@ export {
     Home,
     Groups,
     Settings,
-    SignUp
+    SignUp,
+    Brand,
+    BrandCategory,
+    Ads,
     
 }

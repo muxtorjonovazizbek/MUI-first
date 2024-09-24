@@ -191,8 +191,8 @@ const Index = () => {
           selectedKeys={[selectedKeys]}
           items={admin.map((item, index) => ({
             key: index.toString(),
-            icon: item.icon,
-            label: <NavLink to={item.path} className='text-white'>{item.content}</NavLink>,
+            icon: React.cloneElement(item.icon, {style: {fontSize: "23px"}}),
+            label: <NavLink to={item.path} className='text-white fs-6' >{item.content}</NavLink>,
           }))}
         />
       </Sider>

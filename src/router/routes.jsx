@@ -3,6 +3,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
+import {TagsOutlined, AppstoreOutlined, AppstoreAddOutlined, SolutionOutlined} from '@ant-design/icons'
 
 const admin = [
     {
@@ -13,8 +14,23 @@ const admin = [
     {
         content: "Category",
         path: "/owner/student",
-        icon: <PersonIcon/>
-    }
+        icon: <SolutionOutlined />
+    },
+    {
+        content: "Brand",
+        path: "/owner/brand",
+        icon: <AppstoreAddOutlined />
+    },
+    {
+        content: "BrandCategory",
+        path: "/owner/brand-category",
+        icon: <AppstoreOutlined />
+    },
+    {
+        content: "Ads",
+        path: "/owner/ads",
+        icon: <TagsOutlined />
+    },
 ]
 const user = [
     {
