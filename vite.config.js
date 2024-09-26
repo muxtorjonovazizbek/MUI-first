@@ -11,6 +11,7 @@ export default defineConfig({
       {find: "@service", replacement: "/src/service"},
       {find: "@components", replacement: "/src/components"},
       {find: "@assets", replacement: "/src/assets"},
+      {find: "@modal", replacement: "/src/components/modal"},
     ]
   }
 })

@@ -216,7 +216,7 @@ const LoginForm = () => {
           </div>
         </Form>
       </div>
-    </div>
+    </div>  
   );
 };
 
