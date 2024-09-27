@@ -65,8 +65,9 @@ const Index = ({ open, handleCancel, category }) => {
                 loading={loading}
             >
                 {/* {category ? "Update" : "Add"} */}
-
+                {/* {category.id ? "Update" : "Add"} */}
                 Add
+              
             </Button>
           </Form.Item>
         </Form>

@@ -6,7 +6,21 @@ import {
   } from "react-router-dom";
   
   import App from "../App";
-  import { Login, Owner, User, Teacher, Student, Home, Groups, Settings, SignUp, Brand,BrandCategory, Ads } from "../pages";
+  import { 
+    Login, 
+    Owner, 
+    User, 
+    Teacher, 
+    Student, 
+    Home, 
+    Groups, 
+    Settings, 
+    SignUp, 
+    Brand,
+    BrandCategory, 
+    Ads,
+    SubCategory,
+  } from "../pages";
 
 
 const Index = () => {
@@ -19,6 +33,7 @@ const Index = () => {
             <Route path="owner" element={<Owner />} >
               <Route index element={<Teacher />} />
               <Route path="student" element={<Student />} />
+              <Route path="sub-category/:id" element={<SubCategory />} />
               <Route path="brand" element={<Brand />} />
               <Route path="brand-category" element={<BrandCategory />} />
               <Route path="ads" element={<Ads />} />

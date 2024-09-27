@@ -1,9 +1,9 @@
-import { EditOutlined, ArrowsAltOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Tooltip, Space } from 'antd';
+import { EditOutlined, ArrowsAltOutlined, DeleteOutlined, LinkOutlined,   } from '@ant-design/icons';
+import { Button, Tooltip, Space, Input } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { category } from '@service';
-import { GlobalTable } from '@components';
+import { GlobalTable, ConfirmDelete } from '@components';
 import { Category } from '@modal';
 
 const Index = () => {
@@ -19,8 +19,10 @@ const Index = () => {
   const {search} = useLocation()
   const navigate = useNavigate()
   const getData = async () => {
-   try {
-    const res = await category.get([params])
+   try {  
+    const res = await category.get(params)
+    console.log(res);
+    
     setData(res?.data?.data?.categories)
     setTotal(res?.data?.data?.count)
    } catch (error) {
@@ -37,10 +39,12 @@ const Index = () => {
     const params = new URLSearchParams(search)
     let page = Number(params.get("page")) || 1
     let limit = Number(params.get("limit")) || 3
+    let search_value = params.get("search") || ""
     setParams((prev)=> ({
       ...prev,
       page: page,
-      limit: limit
+      limit: limit,
+      search: search_value
     }))
   }, [search])
 
@@ -64,10 +68,10 @@ const Index = () => {
       limit: pageSize,
       page: current
     }))
-    const current_params = new URLSearchParams(search)
-    current_params.set('page', `${current}`)
-    current_params.set('limit', `${pageSize}`)
-    navigate(`?${current_params}`)
+    const params = new URLSearchParams(search)
+    params.set('page', `${current}`)
+    params.set('limit', `${pageSize}`)
+    navigate(`?${params}`)
   }
 
   const handleCancel = ()=> {
@@ -75,6 +79,29 @@ const Index = () => {
     setUpdate({})
   }
 
+  const handleDelete = async (id)=> {
+    // console.log(id, 'id');
+    // category.delete()
+
+    try {
+      await category.delete(id)
+      setData(data.filter((item) => item.id !== id))
+      setTotal(total - 1)
+    } catch (error) {
+      console.log("Error deleting itme", error);
+      
+    }    
+  }
+
+  const handleSearch = (evt)=> {
+    setParams((prev)=> ({
+      ...prev,
+      search: evt.target.value
+    }))
+    const search_params = new URLSearchParams(search)
+    search_params.set("search", evt.target.value)
+    navigate(`?${search_params}`)
+  }
 
   const columns = [
     {
@@ -90,8 +117,15 @@ const Index = () => {
           <Tooltip title="Edit">
               <Button type="default" onClick={()=> editItem(record)} icon={<EditOutlined/>}/>
           </Tooltip>
+         
           <Tooltip title="Delete">
-              <Button type="default" onClick={()=> deleteItem(record.id)} icon={<DeleteOutlined/>}/>
+              {/* <Button type="default" onClick={()=> deleteItem(record.id)} icon={<DeleteOutlined/>}/> */}
+              <ConfirmDelete id={record.id} deleteItem={handleDelete}/>
+          </Tooltip>
+
+          <Tooltip title="Link">
+              <Button type="default" onClick={()=> navigate(`/owner/sub-category/${record.id}`)} icon={<LinkOutlined />}/>
+             
           </Tooltip>
         </Space>
       ),
@@ -101,8 +135,13 @@ const Index = () => {
   return (
     <>
       <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Category</h3>
+      
       <Category open={open} handleCancel={handleCancel} category={update}/>
+      
+      <div className='flex justify-between items-center'>
+      <Input  style={{width: "300px"}} value={params.search} placeholder="Basic usage" onChange={handleSearch} />
       <Button type='primary' className='mb-3' onClick={()=> setOpen(true)}>Open modal</Button>
+      </div>
       <GlobalTable
        columns={columns} 
        data={data}

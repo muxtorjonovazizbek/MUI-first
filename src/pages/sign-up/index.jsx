@@ -178,19 +178,30 @@
 
 
 import React from "react";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
+import { Button, Checkbox, Form, Input, Typography, message } from "antd";
 import { NavLink, useNavigate } from "react-router-dom";
 import bgImg from "@assets/bg.jpg";
+import { auth } from "@service";
 
 const { Title, Text } = Typography;
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const navigate = useNavigate();
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    navigate("/");
+  const onFinish = async (values) => {
+    try {
+      const res = await auth.sign_up(values)
+      if (res.status === 201) {
+        message.success("Muvaffaqiyatli kirdingiz!");
+        navigate("/");
+      }
+    } catch (error) {
+      message.error("Login vaqtida xatolik yuz berdi.");
+      console.error("Login xatolik:", error);
+    }
+   
   };
+  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -240,7 +251,7 @@ const LoginForm = () => {
           </Form.Item>
           <Form.Item
             label="Phone number"
-            name="phone"
+            name="phone_number"
             rules={[
               {
                 required: true,
@@ -286,7 +297,7 @@ const LoginForm = () => {
                 borderColor: "#d35400",
                 height: "40px",
                 fontSize: "16px",
-              }}
+              }}  
             >
               Sign Up
             </Button>
@@ -304,7 +315,6 @@ const LoginForm = () => {
       </div>
     </div>
   );
-};
-
-export default LoginForm;
+}
+export default SignUpForm;
 

@@ -2,10 +2,9 @@ import { EditOutlined, ArrowsAltOutlined, DeleteOutlined, LinkOutlined,   } from
 import { Button, Tooltip, Space, Input } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import { category } from '@service';
 import { GlobalTable, ConfirmDelete } from '@components';
 import { Category } from '@modal';
-import brands from '@service/brands';
-
 
 const Index = () => {
   const [total, setTotal] = useState([])
@@ -13,22 +12,23 @@ const Index = () => {
   const [open, setOpen] = useState(false)
   const [update, setUpdate] = useState({})
   const [params, setParams] = useState({
+    
     search: "",
     limit: 2,
     page: 1
   })
+  // console.log(params);
   const {search} = useLocation()
   const navigate = useNavigate()
   const getData = async () => {
    try {
-    const res = await brands.get(params)
-    console.log(res);
-    
-    setData(res?.data?.data?.brands)
+    const res = await category.get(params)
+    setData(res?.data?.data?.categories)
     setTotal(res?.data?.data?.count)
    } catch (error) {
     console.log(error);
-   }                                                  
+    // Notification({title: "Error", type: "danger"})
+   }
   }
 
   useEffect(()=> {
@@ -81,10 +81,10 @@ const Index = () => {
 
   const handleDelete = async (id)=> {
     // console.log(id, 'id');
-    // brand.delete()
+    // category.delete()
 
     try {
-      await brands.delete(id)
+      await category.delete(id)
       setData(data.filter((item) => item.id !== id))
       setTotal(total - 1)
     } catch (error) {
@@ -124,7 +124,7 @@ const Index = () => {
           </Tooltip>
 
           {/* <Tooltip title="Link">
-              <Button type="default" onClick={()=> navigate(`/owner/sub-brand/${record.id}`)} icon={<LinkOutlined />}/>
+              <Button type="default" onClick={()=> navigate(`/owner/sub-category/${record.id}`)} icon={<LinkOutlined />}/>
              
           </Tooltip> */}
         </Space>
@@ -134,12 +134,12 @@ const Index = () => {
   ];
   return (
     <>
-      <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Brand</h3>
+      <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Sub-Category</h3>
       
-      <Category open={open} handleCancel={handleCancel} brands={update}/>
+      <Category open={open} handleCancel={handleCancel} category={update}/>
       
       <div className='flex justify-between items-center'>
-      <Input  style={{width: "300px"}} value={params.search} placeholder="Search" onChange={handleSearch} />
+      <Input  style={{width: "300px"}} value={params.search} placeholder="Basic usage" onChange={handleSearch} />
       <Button type='primary' className='mb-3' onClick={()=> setOpen(true)}>Open modal</Button>
       </div>
       <GlobalTable

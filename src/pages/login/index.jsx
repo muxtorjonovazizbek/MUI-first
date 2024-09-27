@@ -129,8 +129,9 @@
 // ======================  Ant Design Log In  ===========================
 
 import React from "react";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
+import { Button, Checkbox, Form, Input, Typography, message } from "antd";
 import { NavLink, useNavigate } from "react-router-dom";
+import { auth } from "@service";
 import bgImg from "@assets/bg.jpg";
 
 const { Title, Text } = Typography;
@@ -138,9 +139,21 @@ const { Title, Text } = Typography;
 const LoginForm = () => {
   const navigate = useNavigate();
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    navigate("/owner");
+  const onFinish = async (values) => {
+    try {
+      const res = await auth.sign_in(values)
+     
+      if (res.status === 201) {
+        let access_token = res?.data?.data?.tokens?.access_token
+        localStorage.setItem("access_token", access_token)  
+        message.success("Muvaffaqiyatli kirdingiz!");
+        navigate("/owner");
+      }
+    } catch (error) {
+      message.error("Login vaqtida xatolik yuz berdi.");
+      console.error("Login xatolik:", error);
+    }
+   
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -166,7 +179,7 @@ const LoginForm = () => {
         >
           <Form.Item
             label="Phone number"
-            name="phone"
+            name="phone_number"
             rules={[
               {
                 required: true,

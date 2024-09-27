@@ -10,6 +10,7 @@ import SignUp from "./sign-up"
 import Brand from "./brand"
 import BrandCategory from "./brand-category"
 import Ads from "./ads"
+import SubCategory from "./sub-category"
 export {
     Login,
     Owner,
@@ -23,5 +24,6 @@ export {
     Brand,
     BrandCategory,
     Ads,
+    SubCategory,
     
 }
