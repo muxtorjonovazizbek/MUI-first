@@ -1,33 +1,65 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form, Input } from "antd";
+import { Button, Modal, Form, Input, message } from "antd";
+import { category } from '@service'
 
 
-const Index = ({ open, handleCancel, category }) => {
+
+const Index = ({ open, handleCancel, update, getData}) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-
+  
   useEffect(()=> {
-    if (category) {
+    if (update) {
         form.setFieldsValue({
-            name: category.name
+            name: update.name
         })
     } else {
         form.resetFields()
     }
-  },[category, form])
+  },[update, form])
 
-  const handleSubmit = (values) => {
-    setLoading(true)
-    if (category.id) {
-        console.log(values, "update");
+  console.log(update, "update");
+  const handleSubmit = async (values) => {
+
+      if (update.id) {
+         setLoading(true)
+         try {
+          const res = await category.update(update.id,values)
+          console.log(res, "from edit category");
+          
+          message.success("Category successfully updated");
+          getData()
+          console.log("update");
+    
+        } catch (error) {
+          console.log(error);
+          message.error("Category is not updated");
+           
+          
+        }
         
-    } else {
-        console.log(values, 'create');
         
-    }
-    console.log(values);
-    setLoading(false)
-    handleCancel()
+      }else {
+        try {
+          const res = await category.create(values)
+          console.log(res, "from");
+          
+          message.success("Category successfully created");
+          getData()
+          console.log(res, "create");
+
+        } catch (error) {
+          console.log(error);
+          message.error("Category is not created");
+          
+        }
+       
+       
+      }
+      
+      handleCancel()
+      setLoading(false)
+      
       
   }
   return (
@@ -36,7 +68,7 @@ const Index = ({ open, handleCancel, category }) => {
         Open Modal
       </Button> */}
       <Modal
-        title={category ? "Create Category" : "Edit Category"}
+        title={update && update.id ? "Edit Category" : "Create Category"}
         open={open}
         onCancel={handleCancel}
         footer={false}
@@ -45,7 +77,7 @@ const Index = ({ open, handleCancel, category }) => {
           form={form}
           name="categoryForm"
           style={{ width: "100%", marginTop: "20px" }}
-          onFinish={ handleSubmit }
+          onFinish={handleSubmit}
           layout="vertical"
         >
           <Form.Item
@@ -65,8 +97,8 @@ const Index = ({ open, handleCancel, category }) => {
                 loading={loading}
             >
                 {/* {category ? "Update" : "Add"} */}
-                {/* {category.id ? "Update" : "Add"} */}
-                Add
+                {update && update.id  ? "Update" : "Add"}
+                {/* Add */}
               
             </Button>
           </Form.Item>

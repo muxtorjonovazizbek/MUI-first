@@ -7,10 +7,11 @@ import Home from "./home/index"
 import Groups from "./Groups/index"
 import Settings from "./Settings/index"
 import SignUp from "./sign-up"
-import Brand from "./brand"
+import Brands from "./brands"
 import BrandCategory from "./brand-category"
 import Ads from "./ads"
 import SubCategory from "./sub-category"
+import NotFound from "./404-not-found"
 export {
     Login,
     Owner,
@@ -21,9 +22,10 @@ export {
     Groups,
     Settings,
     SignUp,
-    Brand,
+    Brands,
     BrandCategory,
     Ads,
     SubCategory,
+    NotFound,
     
 }

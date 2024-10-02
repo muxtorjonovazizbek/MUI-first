@@ -16,10 +16,11 @@ import {
     Groups, 
     Settings, 
     SignUp, 
-    Brand,
+    Brands,
     BrandCategory, 
     Ads,
     SubCategory,
+    NotFound,
   } from "../pages";
 
 
@@ -29,12 +30,13 @@ const Index = () => {
           <Route path="/" element={<App />}>
             <Route index element={<Login />} />
             <Route path="/sign-up" element={<SignUp />} />
+              <Route path="*" element={<NotFound />} />
 
             <Route path="owner" element={<Owner />} >
               <Route index element={<Teacher />} />
               <Route path="student" element={<Student />} />
               <Route path="sub-category/:id" element={<SubCategory />} />
-              <Route path="brand" element={<Brand />} />
+              <Route path="brands" element={<Brands />} />
               <Route path="brand-category" element={<BrandCategory />} />
               <Route path="ads" element={<Ads />} />
             </Route>

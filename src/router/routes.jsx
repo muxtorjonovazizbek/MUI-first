@@ -17,8 +17,8 @@ const admin = [
         icon: <SolutionOutlined />
     },
     {
-        content: "Brand",
-        path: "/owner/brand",
+        content: "Brands",
+        path: "/owner/brands",
         icon: <AppstoreAddOutlined />
     },
     {

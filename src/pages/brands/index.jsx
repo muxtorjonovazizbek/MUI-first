@@ -3,8 +3,8 @@ import { Button, Tooltip, Space, Input } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GlobalTable, ConfirmDelete } from '@components';
-import { Category } from '@modal';
-import brands from '@service/brands';
+import { Brands } from '@modal';
+import {brands} from '@service';
 
 
 const Index = () => {
@@ -136,7 +136,7 @@ const Index = () => {
     <>
       <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Brand</h3>
       
-      <Category open={open} handleCancel={handleCancel} brands={update}/>
+      <Brands open={open} handleCancel={handleCancel} update={update} getData={getData}/>
       
       <div className='flex justify-between items-center'>
       <Input  style={{width: "300px"}} value={params.search} placeholder="Search" onChange={handleSearch} />

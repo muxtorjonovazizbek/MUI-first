@@ -1,2 +1,4 @@
 import Category from "./category"
-export{Category}
+import SubCategory from "./sub-category"
+import Brands from "./brands"
+export{Category, SubCategory, Brands}

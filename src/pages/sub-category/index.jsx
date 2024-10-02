@@ -1,16 +1,17 @@
 import { EditOutlined, ArrowsAltOutlined, DeleteOutlined, LinkOutlined,   } from '@ant-design/icons';
-import { Button, Tooltip, Space, Input } from 'antd';
+import { Button, Tooltip, Space, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
-import { category } from '@service';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { subCategory } from '@service';
 import { GlobalTable, ConfirmDelete } from '@components';
-import { Category } from '@modal';
+import { SubCategory } from '@modal';
 
 const Index = () => {
   const [total, setTotal] = useState([])
   const [data,setData] = useState([])
   const [open, setOpen] = useState(false)
   const [update, setUpdate] = useState({})
+  const {id} = useParams()
   const [params, setParams] = useState({
     
     search: "",
@@ -22,8 +23,8 @@ const Index = () => {
   const navigate = useNavigate()
   const getData = async () => {
    try {
-    const res = await category.get(params)
-    setData(res?.data?.data?.categories)
+    const res = await subCategory.get(id)  
+    setData(res?.data?.data?.subcategories)
     setTotal(res?.data?.data?.count)
    } catch (error) {
     console.log(error);
@@ -79,16 +80,17 @@ const Index = () => {
     setUpdate({})
   }
 
+ 
   const handleDelete = async (id)=> {
-    // console.log(id, 'id');
-    // category.delete()
+    console.log(id, 'id');
+    category.delete()
 
     try {
-      await category.delete(id)
+      await subCategory.delete(id)
       setData(data.filter((item) => item.id !== id))
       setTotal(total - 1)
     } catch (error) {
-      console.log("Error deleting itme", error);
+      console.log("Error deleting item", error);
       
     }    
   }
@@ -96,7 +98,7 @@ const Index = () => {
   const handleSearch = (evt)=> {
     setParams((prev)=> ({
       ...prev,
-      search: evt.target.value
+      search: evt.target.value  
     }))
     const search_params = new URLSearchParams(search)
     search_params.set("search", evt.target.value)
@@ -136,7 +138,7 @@ const Index = () => {
     <>
       <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Sub-Category</h3>
       
-      <Category open={open} handleCancel={handleCancel} category={update}/>
+      <SubCategory open={open} handleCancel={handleCancel} update={update} getData={getData} />
       
       <div className='flex justify-between items-center'>
       <Input  style={{width: "300px"}} value={params.search} placeholder="Basic usage" onChange={handleSearch} />
@@ -146,7 +148,7 @@ const Index = () => {
        columns={columns} 
        data={data}
        pagination={{
-        current: params.page,
+        current: params.page, 
         pageSize: params.limit,
         total: total,
         showSizeChanger: true,
