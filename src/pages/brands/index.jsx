@@ -1,5 +1,5 @@
 import { EditOutlined, ArrowsAltOutlined, DeleteOutlined, LinkOutlined,   } from '@ant-design/icons';
-import { Button, Tooltip, Space, Input } from 'antd';
+import { Button, Tooltip, Space, Input, Form  } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GlobalTable, ConfirmDelete } from '@components';
@@ -12,6 +12,7 @@ const Index = () => {
   const [data,setData] = useState([])
   const [open, setOpen] = useState(false)
   const [update, setUpdate] = useState({})
+  const [form] = Form.useForm();
   const [params, setParams] = useState({
     search: "",
     limit: 2,
@@ -25,6 +26,8 @@ const Index = () => {
     console.log(res);
     
     setData(res?.data?.data?.brands)
+    // console.log(res?.data?.data?.brands, "check");
+    
     setTotal(res?.data?.data?.count)
    } catch (error) {
     console.log(error);
@@ -77,6 +80,7 @@ const Index = () => {
   const handleCancel = ()=> {
     setOpen(false)
     setUpdate({})
+    form.resetFields()
   }
 
   const handleDelete = async (id)=> {

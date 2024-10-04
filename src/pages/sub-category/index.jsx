@@ -82,8 +82,8 @@ const Index = () => {
 
  
   const handleDelete = async (id)=> {
-    console.log(id, 'id');
-    category.delete()
+    // console.log(id, 'id');
+    // category.delete()
 
     try {
       await subCategory.delete(id)

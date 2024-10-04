@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, message, Select, Upload,  } from "antd";
-import { brands, category } from '@service';
+import { brandCategory, brands } from '@service';
 import {UploadOutlined} from "@ant-design/icons"
 import TextArea from "antd/es/input/TextArea";
 
@@ -8,12 +8,12 @@ import TextArea from "antd/es/input/TextArea";
 const Index = ({ open, handleCancel, update, getData }) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-  const [categoryList, setCategoryList] = useState([])
+  const [brandList, setBrandList] = useState([])
   const [edit, setEdit] = useState({
   
     name: "",
-    categoryId: "",
-    description: ""
+    brandId: "",
+   
   })
   // console.log(categoryList, "categoryLIsy");
   console.log(edit, "bu edit");
@@ -23,9 +23,8 @@ const Index = ({ open, handleCancel, update, getData }) => {
     if (update.id) {
         form.setFieldsValue({
             name: update.name,
-            category_id: update.category_id,
-            description: update.description,
-          
+            brand_id: update.brand_id,
+           
         })
     } else {
         form.resetFields()
@@ -34,50 +33,45 @@ const Index = ({ open, handleCancel, update, getData }) => {
 
 
   useEffect(()=> {
-    getCategories()
+    getBrand()
   },[]) 
 
-  const getCategories = async () => {
+  const getBrand = async () => {
     try {
-      const res = await category.get()
-      // console.log(res, "get res");
+      const res = await brands.get()
+      console.log(res, "get res brand ");
       
-      setCategoryList(res?.data?.data?.categories)
+      setBrandList(res?.data?.data?.brands)
+      
     } catch (error) {
       console.log("Error", error);
-      message.error("Error getting categories")
+      message.error("Error getting brand-category")
     }
   }
   
-  const handleFileUpload = ({ file }) => {
-    form.setFieldsValue({ file });
-    return false; // Fayl avtomatik yuklanishidan to'xtatish
-  };
-
+  
   const handleSubmit = async (values) => {
     
     setEdit({
       name: values.name,
-      categoryId: parseInt(values.category_id),
-      description: values.description
+      brandId: parseInt(values.brand_id),
+     
     })
     
     const formData = new FormData()
     formData.append("name", values.name)
-    formData.append("category_id", parseInt(values.category_id))
-    formData.append("description", values.description)
-    if (values.file && values.file.file) {
-      formData.append("file", values.file.file)
-    }
+    formData.append("brand_id", parseInt(values.brand_id))
+    
+    
 
     
    if (update.id) {
       setLoading(true)
       try {
-        const res = await brands.update(update.id, formData)
+        const res = await brandCategory.update(update.id, formData)
         if (res.status === 200) {
           
-          message.success("Brands updated succesfully")
+          message.success("Brand Category updated succesfully")
           handleCancel()
           getData()
           setLoading(false)
@@ -85,7 +79,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
         
       } catch (error) {
         console.log(error);
-        message.error("Error updating brands")
+        message.error("Error updating brand category")
         setLoading(false)
         
       }
@@ -93,9 +87,9 @@ const Index = ({ open, handleCancel, update, getData }) => {
    }else {
    
     try {
-      const res = await brands.create(formData)
+      const res = await brandCategory.create(formData)
       if (res.status === 201) {
-        message.success("Brands created succesfully")
+        message.success("Brand category created succesfully")
         handleCancel()
         getData()
         setLoading(false)
@@ -105,7 +99,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
       
     } catch (error) {
       console.log(error);
-      message.error("Error creating brands")
+      message.error("Error creating brand category")
       setLoading(false)
     }
    }
@@ -116,7 +110,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
   return (
     <>
       <Modal
-        title={update && update.id ? "Edit Brand" : "Create Brand"}
+        title={update && update.id ? "Edit Brand Category" : "Create Brand Category"}
         open={open}
         onCancel={handleCancel}
         footer={false}
@@ -137,41 +131,23 @@ const Index = ({ open, handleCancel, update, getData }) => {
           </Form.Item>
 
           <Form.Item
-            label="Select Category"
-            name="category_id"
+            label="Select Brand"
+            name="brand_id"
             rules={[{required: true, message: "Select category name"}]}
           >
-           <Select size="large" placeholder="Select category">
+           <Select size="large" placeholder="Select brand">
            {
-              categoryList.map((category) => (
-                <Select.Option key={category.id} value={category.id}>
-                 {category.name}
+              brandList.map((brand) => (
+                <Select.Option key={brand.id} value={brand.id}>
+                 {brand.name}
                 </Select.Option>
               ))}
             </Select> 
           </Form.Item>
 
-          {
-            !update.id && (
-              <Form.Item
-            label="Select File"
-            name="file"
-            rules={[{required: true, message: "Select category name"}]}
-          >
-            <Upload beforeUpload={handleFileUpload}>
-               <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </Form.Item>
-            )
-          }
+        
 
-          <Form.Item
-            label="Add Desc..."
-            name="description"
-            rules={[{required: true, message: "Add Description"}]}
-          >
-           <TextArea/> 
-          </Form.Item>
+       
 
           <Form.Item>
             <Button
