@@ -15,7 +15,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
     brandId: "",
    
   })
-  // console.log(categoryList, "categoryLIsy");
+  console.log(brandList, "brandList");
   console.log(edit, "bu edit");
   
 
@@ -51,24 +51,29 @@ const Index = ({ open, handleCancel, update, getData }) => {
   
   
   const handleSubmit = async (values) => {
+    // console.log(values, "val check");
     
-    setEdit({
-      name: values.name,
-      brandId: parseInt(values.brand_id),
+    // setEdit({
+    //   name: values.name,
+    //   brandId: values.brand_id,
      
-    })
+    // })
     
-    const formData = new FormData()
-    formData.append("name", values.name)
-    formData.append("brand_id", parseInt(values.brand_id))
+    // const formData = new FormData()
+    // formData.append("name", values.name)
+    // formData.append("brand_id", parseInt(values.brand_id))
+    // console.log(formData, "formData check");
+    // console.log( formData.append("name", values.name), "data append");
+    
+    
     
     
 
     
-   if (update.id) {
+   if (update && update.id) {
       setLoading(true)
       try {
-        const res = await brandCategory.update(update.id, formData)
+        const res = await brandCategory.update(update.id, values)
         if (res.status === 200) {
           
           message.success("Brand Category updated succesfully")
@@ -87,14 +92,14 @@ const Index = ({ open, handleCancel, update, getData }) => {
    }else {
    
     try {
-      const res = await brandCategory.create(formData)
+      const res = await brandCategory.create(values)
+      // console.log(res, "res create");
       if (res.status === 201) {
         message.success("Brand category created succesfully")
         handleCancel()
         getData()
         setLoading(false)
       }
-      console.log(res, "res from create");
       
       
     } catch (error) {

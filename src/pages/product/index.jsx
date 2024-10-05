@@ -3,8 +3,8 @@ import { Button, Tooltip, Space, Input, Form  } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GlobalTable, ConfirmDelete } from '@components';
-import { BrandCategory } from '@modal';
-import {brandCategory} from '@service';
+import { Product } from '@modal';
+import {product} from '@service';
 
 
 const Index = () => {
@@ -22,10 +22,10 @@ const Index = () => {
   const navigate = useNavigate()
   const getData = async () => {
    try {
-    const res = await brandCategory.get(params)
-    console.log(res, "brand category");
+    const res = await product.get(params)
+    console.log(res, "products");
     
-    setData(res?.data?.data?.brandCategories)
+    setData(res?.data?.data?.products)
     setTotal(res?.data?.data?.count)
   
    } catch (error) {
@@ -87,7 +87,7 @@ const Index = () => {
     // brand.delete()
 
     try {
-      await brandCategory.delete(id)
+      await product.delete(id)
       setData(data.filter((item) => item.id !== id))
       setTotal(total - 1)
     } catch (error) {
@@ -133,9 +133,9 @@ const Index = () => {
   ];
   return (
     <>
-      <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Brand Categories</h3>
+      <h3 className='pl-2 py-2 font-bold fs-4 text-center'>Product</h3>
       
-      <BrandCategory open={open} handleCancel={handleCancel} update={update} getData={getData}/>
+      <Product open={open} handleCancel={handleCancel} update={update} getData={getData}/>
       
       <div className='flex justify-between items-center'>
       <Input  style={{width: "300px"}} value={params.search} placeholder="Search" onChange={handleSearch} />

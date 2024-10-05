@@ -15,7 +15,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
     categoryId: "",
     description: ""
   })
-  // console.log(categoryList, "categoryLIsy");
+  console.log(categoryList, "categoryLIsy");
   console.log(edit, "bu edit");
   
 
@@ -70,8 +70,9 @@ const Index = ({ open, handleCancel, update, getData }) => {
       formData.append("file", values.file.file)
     }
 
+ 
     
-   if (update.id) {
+   if (update && update.id) {
       setLoading(true)
       try {
         const res = await brands.update(update.id, formData)
@@ -80,6 +81,8 @@ const Index = ({ open, handleCancel, update, getData }) => {
           message.success("Brands updated succesfully")
           handleCancel()
           getData()
+          console.log(getData(), "brands getData check");
+          
           setLoading(false)
         }
         

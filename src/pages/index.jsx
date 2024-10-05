@@ -12,6 +12,7 @@ import BrandCategory from "./brand-category"
 import Ads from "./ads"
 import SubCategory from "./sub-category"
 import NotFound from "./404-not-found"
+import Product from "./product"
 export {
     Login,
     Owner,
@@ -27,5 +28,6 @@ export {
     Ads,
     SubCategory,
     NotFound,
+    Product,
     
 }

@@ -21,6 +21,7 @@ import {
     Ads,
     SubCategory,
     NotFound,
+    Product,
   } from "../pages";
 
 
@@ -33,7 +34,7 @@ const Index = () => {
               <Route path="*" element={<NotFound />} />
 
             <Route path="owner" element={<Owner />} >
-              <Route index element={<Teacher />} />
+              <Route index element={<Product />} />
               <Route path="student" element={<Student />} />
               <Route path="sub-category/:id" element={<SubCategory />} />
               <Route path="brands" element={<Brands />} />

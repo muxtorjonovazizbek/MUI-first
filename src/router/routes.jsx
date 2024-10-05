@@ -3,14 +3,15 @@ import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
-import {TagsOutlined, AppstoreOutlined, AppstoreAddOutlined, SolutionOutlined} from '@ant-design/icons'
+import {TagsOutlined, AppstoreOutlined, AppstoreAddOutlined, SolutionOutlined, CodeSandboxOutlined} from '@ant-design/icons'
 
 const admin = [
     {
-        content: "Teacher",
+        content: "Product",
         path: "/owner",
-        icon: <Person4Icon/>
+        icon: <CodeSandboxOutlined />
     },
+   
     {
         content: "Category",
         path: "/owner/student",
