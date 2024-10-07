@@ -193,7 +193,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
             name="brand_id"
             rules={[{required: true, message: "Select category name"}]}
           >
-           <Select onChange={(value)=> handleChange(value,"brand_id" )} size="large" placeholder="Select brand">
+           <Select onChange={(value)=> handleChange(value,"brand_id" )} size="large" placeholder="Select brand" style={{width: "205px"}}>
            {
               brandList.map((brand) => (
                 <Select.Option key={brand.id} value={brand.id}>
@@ -204,13 +204,13 @@ const Index = ({ open, handleCancel, update, getData }) => {
           </Form.Item>
         </div>
 
-          <div className="d-flex gap-6">
+          <div className="d-flex gap-3 ml-3">
           <Form.Item
             label="Select brand-category"
             name="brand_category_id"
             rules={[{required: true, message: "Select brand-category name"}]}
           >
-           <Select size="large" placeholder="Select brand-category">
+           <Select size="large" placeholder="Select brand-category" style={{width: "205px"}}>
            {
               brandCategoryList.map((brandCategory) => (
                 <Select.Option key={brandCategory.id} value={brandCategory.id}>
@@ -228,8 +228,8 @@ const Index = ({ open, handleCancel, update, getData }) => {
             name="files"
             rules={[{required: true, message: "Select category name"}]}
           >
-            <Upload  beforeUpload={handleFileUpload}>
-               <Button size="large" icon={<UploadOutlined />}>Click to Upload</Button>
+            <Upload  beforeUpload={handleFileUpload} >
+               <Button size="large" style={{width: "205px"}} icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
             )
