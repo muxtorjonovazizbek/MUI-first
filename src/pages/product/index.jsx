@@ -3,12 +3,13 @@ import { Button, Tooltip, Space, Input, Form  } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GlobalTable, ConfirmDelete } from '@components';
-import { Product } from '@modal';
+import { Product } from '@modal'; 
 import {product} from '@service';
 
 
+
 const Index = () => {
-  const [total, setTotal] = useState([])
+  const [total, setTotal] = useState(0)
   const [data,setData] = useState([])
   const [open, setOpen] = useState(false)
   const [update, setUpdate] = useState({})
@@ -20,13 +21,14 @@ const Index = () => {
   })
   const {search} = useLocation()
   const navigate = useNavigate()
+
   const getData = async () => {
    try {
     const res = await product.get(params)
     console.log(res, "products");
     
-    setData(res?.data?.data?.products)
-    setTotal(res?.data?.data?.count)
+    setData(res?.data?.data?.products || [])
+    setTotal(res?.data?.data?.count  || 0)
   
    } catch (error) {
     console.log(error);
@@ -40,7 +42,7 @@ const Index = () => {
   useEffect(()=> {
     const params = new URLSearchParams(search)
     let page = Number(params.get("page")) || 1
-    let limit = Number(params.get("limit")) || 3
+    let limit = Number(params.get("limit")) || 2
     let search_value = params.get("search") || ""
     setParams((prev)=> ({
       ...prev,
@@ -58,10 +60,13 @@ const Index = () => {
     
   }
 
-  // const deleteItem = (id) => {
-  //   console.log(id);
+  const deleteItem = async (id) => {
+    const res = await product.delete(id)
+    if (res.status === 200) {
+      getData()
+    }
     
-  // }
+  }
 
   const handleTableChange = (pagination) => {
     const {current, pageSize} = pagination
@@ -82,19 +87,19 @@ const Index = () => {
     form.resetFields()
   }
 
-  const handleDelete = async (id)=> {
-    // console.log(id, 'id');
-    // brand.delete()
+  // const handleDelete = async (id)=> {
+  //   // console.log(id, 'id');
+  //   // brand.delete()
 
-    try {
-      await product.delete(id)
-      setData(data.filter((item) => item.id !== id))
-      setTotal(total - 1)
-    } catch (error) {
-      console.log("Error deleting itme", error);
+  //   try {
+  //     const res = await product.delete(id)
+  //     setData(data.filter((item) => item.id !== id))
+  //     setTotal(total - 1)
+  //   } catch (error) {
+  //     console.log("Error deleting itme", error);
       
-    }    
-  }
+  //   }    
+  // }
 
   const handleSearch = (evt)=> {
     setParams((prev)=> ({
@@ -107,6 +112,16 @@ const Index = () => {
   }
 
   const columns = [
+    {
+      title: "№",
+      render: (_, __, ind) => {
+        if (params?.page && params?.limit) {
+         return (params.page - 1) * params.limit + ind + 1;
+        }
+        return ind + 1;
+      }
+    },
+  
     {
       title: 'Name',
       dataIndex: 'name',
@@ -122,8 +137,10 @@ const Index = () => {
           </Tooltip>
          
           <Tooltip title="Delete">
-              <ConfirmDelete id={record.id} deleteItem={handleDelete}/>
+              <ConfirmDelete onConfirm={()=> deleteItem(record.id)} icon={<DeleteOutlined/>} />
+              
           </Tooltip>
+        
 
           
         </Space>

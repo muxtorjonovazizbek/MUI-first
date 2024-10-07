@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form, Input, message, Select, Upload,  } from "antd";
+import { Button, Modal, Form, Input, message, Select,  } from "antd";
 import { brandCategory, brands } from '@service';
-import {UploadOutlined} from "@ant-design/icons"
-import TextArea from "antd/es/input/TextArea";
+
 
 
 const Index = ({ open, handleCancel, update, getData }) => {

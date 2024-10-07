@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, message, Select, Upload,  } from "antd";
 import { product, category, brands, brandCategory } from '@service';
 import {UploadOutlined} from "@ant-design/icons"
-import TextArea from "antd/es/input/TextArea";
-import FormItem from "antd/es/form/FormItem";
 
 
 const Index = ({ open, handleCancel, update, getData }) => {
@@ -12,23 +10,16 @@ const Index = ({ open, handleCancel, update, getData }) => {
   const [categoryList, setCategoryList] = useState([])
   const [brandList, setBrandList] = useState([])
   const [brandCategoryList, setBrandCatgoryList] = useState([])
-  // const [edit, setEdit] = useState({
-  
-  //   name: "",
-  //   brandId: "",
-   
-  // })
-  // console.log(brandList, "brandList");
-  // console.log(edit, "bu edit");
+  const [edit, setEdit] = useState({})
   
   const handleFileUpload = ({ file }) => {
     form.setFieldsValue({ file });
-    return false; // Fayl avtomatik yuklanishidan to'xtatish
+    return false;
   };
 
 
   useEffect(()=> {
-    if (update && update.id) {
+    if (update.id) {
         form.setFieldsValue({
             name: update.name,
             price: update.price,
@@ -46,22 +37,9 @@ const Index = ({ open, handleCancel, update, getData }) => {
 
   useEffect(()=> {
     getCategory()
-    getBrand()
-    getbrandCategory()
   },[]) 
 
-  const getBrand = async () => {
-    try {
-      const res = await brands.get()
-      console.log(res, "get res brand ");
-      
-      setBrandList(res?.data?.data?.brands)
-      
-    } catch (error) {
-      console.log("Error", error);
-      message.error("Error getting brand-category")
-    }
-  }
+
   const getCategory = async () => {
     try {
       const res = await category.get()
@@ -74,55 +52,45 @@ const Index = ({ open, handleCancel, update, getData }) => {
       message.error("Error getting categories")
     }
   }
-  const getbrandCategory = async () => {
-    try {
-      const res = await brandCategory.get()
-      console.log(res, "get res brand ");
-      
-      setBrandCatgoryList(res?.data?.data?.brandCategories)
-      
-    } catch (error) {
-      console.log("Error", error);
-      message.error("Error getting brand-categories")
-    }
-  }
-  
-  
+ 
+
   const handleSubmit = async (values) => {
-    // console.log(values, "val check");
-    
-    // setEdit({
-    //   name: values.name,
-    //   brandId: values.brand_id,
-     
-    // })
+
+    setEdit({
+      name: values.name,
+      prie: values.price,
+      category_id:  parseInt(values.category_id),
+      brand_id: values.brand_id,
+      brand_category_id: values.brand_category_id
+    })
     
     const formData = new FormData()
     formData.append("name", values.name)
-    formData.append("category_id", values.category_id)
-    formData.append("brand_id", parseInt(values.brand_id))
-    formData.append("brand_brand_id", parseInt(values.brand_brand_id))
+    formData.append("price", values.price)
+    formData.append("category_id", parseInt(values.category_id))
+    formData.append("brand_id", values.brand_id)
+    formData.append("brand_category_id", values.brand_category_id)
 
     if (values.file && values.file.file) {
       formData.append("file", values.file.file)
     }
     
-    setLoading(true)
-   if (update && update.id) {
+    // setLoading(true)
+   if (update.id) {
       try {
-        const res = await product.update(update.id, formData)
+        const res = await product.update(update.id, edit)
         if (res.status === 200) {
           
           message.success("Brand Category updated succesfully")
           handleCancel()
           getData()
-          setLoading(false)
+          // setLoading(false)
         }
         
       } catch (error) {
         console.log(error);
         message.error("Error updating brand category")
-        setLoading(false)
+        // setLoading(false)
         
       }
 
@@ -142,12 +110,32 @@ const Index = ({ open, handleCancel, update, getData }) => {
     } catch (error) {
       console.log(error);
       message.error("Error creating product")
-      setLoading(false)
+      // setLoading(false)
     }
    }
     
 
       
+  }
+
+  const handleChange = async (value, InputName) => {
+    if (InputName === "category_id") {
+      const res = await brands.getBrandCategoryId(value)
+      if (res.status === 200) {
+        // console.log(, 'brand id');
+        setBrandList(res?.data?.data?.brands)
+        
+      }
+    }
+    if (InputName === "brand_id") {
+        const res = await brandCategory.getBrandCategoryId(value)
+        if (res.status === 200) {
+          // console.log(res, "bc ID");
+          setBrandCatgoryList(res?.data?.data?.brandCategories)
+        }
+    }
+
+    
   }
   return (
     <>
@@ -159,12 +147,13 @@ const Index = ({ open, handleCancel, update, getData }) => {
       >
         <Form
           form={form}
-          name="subCategoryForm"
+          name="productForm"
           style={{ width: "100%", marginTop: "20px" }}
           onFinish={ handleSubmit }
           layout="vertical"
         >
-          <Form.Item
+         <div className="d-flex gap-3 ml-3">
+         <Form.Item
             label="Product name"
             name="name"
             rules={[{required: true, message: "Enter brand name"}]}
@@ -180,13 +169,15 @@ const Index = ({ open, handleCancel, update, getData }) => {
           >
             <Input size="large" type="number" inputMode="numeric" pattern="\d*"/>
           </Form.Item>
+         </div>
 
-          <Form.Item
+        <div className="flex gap-3 ml-3 w-full">
+        <Form.Item
             label="Select Category"
             name="category_id"
             rules={[{required: true, message: "Select category name"}]}
           >
-           <Select size="large" placeholder="Select category">
+           <Select onChange={(value) => handleChange(value,"category_id" )} size="large" placeholder="Select category" style={{width: "205px"}}>
            {
               categoryList.map((category) => (
                 <Select.Option key={category.id} value={category.id}>
@@ -202,7 +193,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
             name="brand_id"
             rules={[{required: true, message: "Select category name"}]}
           >
-           <Select size="large" placeholder="Select brand">
+           <Select onChange={(value)=> handleChange(value,"brand_id" )} size="large" placeholder="Select brand">
            {
               brandList.map((brand) => (
                 <Select.Option key={brand.id} value={brand.id}>
@@ -211,7 +202,9 @@ const Index = ({ open, handleCancel, update, getData }) => {
               ))}
             </Select> 
           </Form.Item>
+        </div>
 
+          <div className="d-flex gap-6">
           <Form.Item
             label="Select brand-category"
             name="brand_category_id"
@@ -232,15 +225,16 @@ const Index = ({ open, handleCancel, update, getData }) => {
             !update.id && (
               <Form.Item
             label="Select File"
-            name="file"
+            name="files"
             rules={[{required: true, message: "Select category name"}]}
           >
-            <Upload beforeUpload={handleFileUpload}>
-               <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            <Upload  beforeUpload={handleFileUpload}>
+               <Button size="large" icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
             )
           }
+          </div>
 
           <Form.Item>
             <Button

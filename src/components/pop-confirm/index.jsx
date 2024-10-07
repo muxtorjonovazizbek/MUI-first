@@ -7,7 +7,7 @@ const Index = ({id, deleteItem}) => {
     }
   return (
     <>
-        <Popconfirm
+    <Popconfirm
     title="Delete the category"
     description="Are you sure to delete this category?"
     okText="Yes"

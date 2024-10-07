@@ -9,14 +9,14 @@ const Index = ({ open, handleCancel, update, getData }) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const [categoryList, setCategoryList] = useState([])
-  const [edit, setEdit] = useState({
+  // const [edit, setEdit] = useState({
   
-    name: "",
-    categoryId: "",
-    description: ""
-  })
-  console.log(categoryList, "categoryLIsy");
-  console.log(edit, "bu edit");
+  //   name: "",
+  //   categoryId: "",
+  //   description: ""
+  // })
+  // console.log(categoryList, "categoryLIsy");
+  // console.log(edit, "bu edit");
   
 
   useEffect(()=> {
@@ -55,13 +55,15 @@ const Index = ({ open, handleCancel, update, getData }) => {
   };
 
   const handleSubmit = async (values) => {
+    console.log(values, 'brands val');
     
-    setEdit({
-      name: values.name,
-      categoryId: parseInt(values.category_id),
-      description: values.description
-    })
     
+      // setEdit({
+      //   name: values.name,
+      //   categoryId: parseInt(values.category_id),
+      //   description: values.description
+      // })
+      
     const formData = new FormData()
     formData.append("name", values.name)
     formData.append("category_id", parseInt(values.category_id))
@@ -75,7 +77,7 @@ const Index = ({ open, handleCancel, update, getData }) => {
    if (update && update.id) {
       setLoading(true)
       try {
-        const res = await brands.update(update.id, formData)
+        const res = await brands.update(update.id, values)
         if (res.status === 200) {
           
           message.success("Brands updated succesfully")
