@@ -64,9 +64,6 @@ const Index = ({ open, handleCancel, update, getData}) => {
   }
   return (
     <>
-      {/* <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button> */}
       <Modal
         title={update && update.id ? "Edit Category" : "Create Category"}
         open={open}
@@ -96,9 +93,7 @@ const Index = ({ open, handleCancel, update, getData}) => {
                 htmlType="submit"
                 loading={loading}
             >
-                {/* {category ? "Update" : "Add"} */}
                 {update && update.id  ? "Update" : "Add"}
-                {/* Add */}
               
             </Button>
           </Form.Item>

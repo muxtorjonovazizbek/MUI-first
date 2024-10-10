@@ -150,7 +150,7 @@ const LoginForm = () => {
         navigate("/owner");
       }
     } catch (error) {
-      message.error("Login vaqtida xatolik yuz berdi.");
+        
       console.error("Login xatolik:", error);
     }
    
